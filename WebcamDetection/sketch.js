@@ -21,6 +21,8 @@ let totalSecond = 0;
 let minutes = 0;
 let seconds = 0;
 
+//MQTT
+const mqttTitle = "AceLab"
 
 
 function preload() {
@@ -97,9 +99,9 @@ function drawDetection(){
       }
       //control cell phone value
       
-    client.publish('jieThesis/Oculus/seconds', seconds.toString(), { qos: 0, retain: false });
+    client.publish(mqttTitle + '/Oculus/seconds', seconds.toString(), { qos: 0, retain: false });
 
-    client.publish('jieThesis/Oculus/minutes', minutes.toString(), { qos: 0, retain: false });
+    client.publish(mqttTitle +'/Oculus/minutes', minutes.toString(), { qos: 0, retain: false });
     
     
     
@@ -123,7 +125,7 @@ function drawDetection(){
       flag = true;
     }
     
-    client.publish('jieThesis/Oculus/' + mqttName, flag.toString(), { qos: 0, retain: false });
+    client.publish(mqttTitle +'/Oculus/' + mqttName, flag.toString(), { qos: 0, retain: false });
 
   }
   }

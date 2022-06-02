@@ -36,6 +36,9 @@ namespace M2MqttUnity.Examples
         public bool teddyBear = false;
         public bool wineGlass = false;
 
+        //MQTT Title
+        [SerializeField] private string mqttTitle = "AceLab";
+
 
         public void TestPublish()
         {
@@ -105,11 +108,11 @@ namespace M2MqttUnity.Examples
 
         protected override void SubscribeTopics()
         {
-            client.Subscribe(new string[] { "jieThesis/Oculus/seconds" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-            client.Subscribe(new string[] { "jieThesis/Oculus/minutes" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-            client.Subscribe(new string[] { "jieThesis/Oculus/cellPhone" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-            client.Subscribe(new string[] { "jieThesis/Oculus/teddyBear" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-            client.Subscribe(new string[] { "jieThesis/Oculus/wineGlass" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { mqttTitle + "/Oculus/seconds" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { mqttTitle + "/Oculus/minutes" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { mqttTitle + "/Oculus/cellPhone" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { mqttTitle + "/Oculus/teddyBear" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            client.Subscribe(new string[] { mqttTitle + "/Oculus/wineGlass" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
         }
 
@@ -196,7 +199,7 @@ namespace M2MqttUnity.Examples
             StoreMessage(msg);
             //Data = JsonMapper.ToObject(msg);
 
-            if (topic == "jieThesis/Oculus/seconds")
+            if (topic == mqttTitle + "/Oculus/seconds")
             {
                 //print("1: " + Single.Parse(msg));
                 //print(msg.GetType());
@@ -204,7 +207,7 @@ namespace M2MqttUnity.Examples
                 //print("seconds: "+ seconds);
             }
 
-            if (topic == "jieThesis/Oculus/minutes")
+            if (topic == mqttTitle + "/Oculus/minutes")
             {
                 //print("1: " + Single.Parse(msg));
                 //print(msg.GetType());
@@ -212,7 +215,7 @@ namespace M2MqttUnity.Examples
                 //print("minutes: " + minutes);
             }
 
-            if (topic == "jieThesis/Oculus/cellPhone")
+            if (topic == mqttTitle + "/Oculus/cellPhone")
             {
                 //print("1: " + Single.Parse(msg));
                 //print(msg.GetType());
@@ -220,14 +223,14 @@ namespace M2MqttUnity.Examples
                 //print("cell phone: " + cellPhone);
             }
 
-            if (topic == "jieThesis/Oculus/teddyBear")
+            if (topic == mqttTitle + "/Oculus/teddyBear")
             {
                 //print("1: " + Single.Parse(msg));
                 //print(msg.GetType());
                 teddyBear = bool.Parse(msg);
                 //print("cell phone: " + cellPhone);
             }
-            if (topic == "jieThesis/Oculus/wineGlass")
+            if (topic == mqttTitle + "/Oculus/wineGlass")
             {
                 //print("1: " + Single.Parse(msg));
                 //print(msg.GetType());
