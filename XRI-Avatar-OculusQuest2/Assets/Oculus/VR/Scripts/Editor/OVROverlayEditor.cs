@@ -143,13 +143,24 @@ public class OVROverlayEditor : Editor
 		EditorGUILayout.Space();
 
 		EditorGUILayout.LabelField(new GUIContent("Overlay Shape", "The shape of this overlay"), EditorStyles.boldLabel);
-		int currentShapeIndex = Array.IndexOf(selectableShapeValues, overlay.currentOverlayShape);
-		if (currentShapeIndex == -1) {
-			Debug.LogError("Invalid shape encountered");
-			currentShapeIndex = 0;
+		// If the overlay shape has been set to a passthrough shape (via scripting), do not allow to change it.
+		if (!OVROverlay.IsPassthroughShape(overlay.currentOverlayShape))
+		{
+			int currentShapeIndex = Array.IndexOf(selectableShapeValues, overlay.currentOverlayShape);
+			if (currentShapeIndex == -1)
+			{
+				Debug.LogError("Invalid shape encountered");
+				currentShapeIndex = 0;
+			}
+			currentShapeIndex = EditorGUILayout.Popup(new GUIContent("Overlay Shape", "The shape of this overlay"), currentShapeIndex, selectableShapeNames);
+			overlay.currentOverlayShape = selectableShapeValues[currentShapeIndex];
 		}
-		currentShapeIndex = EditorGUILayout.Popup(new GUIContent("Overlay Shape", "The shape of this overlay"), currentShapeIndex, selectableShapeNames);
-		overlay.currentOverlayShape = selectableShapeValues[currentShapeIndex];
+
+		if (overlay.currentOverlayShape == OVROverlay.OverlayShape.Cubemap)
+		{
+			overlay.useLegacyCubemapRotation = EditorGUILayout.Toggle(new GUIContent("Use Legacy Cubemap Rotation",
+				"Whether the cubemap should use the legacy rotation which was rotated 180 degrees around the Y axis comapred to Unity's definition of cubemaps. This setting will be deprecated in the near future, therefore it is recommended to fix the cubemap texture instead."), overlay.useLegacyCubemapRotation);
+		}
 
 		EditorGUILayout.Space();
 

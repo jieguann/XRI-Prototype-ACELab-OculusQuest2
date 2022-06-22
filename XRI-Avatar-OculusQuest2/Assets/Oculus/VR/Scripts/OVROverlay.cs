@@ -171,6 +171,9 @@ public class OVROverlay : MonoBehaviour
 	[Tooltip("When checked, the layer will use bicubic filtering")]
 	public bool useBicubicFiltering = false;
 
+	[Tooltip("When checked, the cubemap will retain the legacy rotation which was rotated 180 degrees around the Y axis comapred to Unity's definition of cubemaps. This setting will be deprecated in the near future, therefore it is recommended to fix the cubemap texture instead.")]
+	public bool useLegacyCubemapRotation = false;
+
 
 	/// <summary>
 	/// Preview the overlay in the editor using a mesh renderer.
@@ -878,11 +881,18 @@ public class OVROverlay : MonoBehaviour
 
 	void InitOVROverlay()
 	{
-		if (!OVRManager.isHmdPresent)
+#if USING_XR_SDK_OPENXR
+		if (!OVRPlugin.UnityOpenXR.Enabled)
 		{
-			enabled = false;
-			return;
+#endif
+			if (!OVRManager.isHmdPresent)
+			{
+				enabled = false;
+				return;
+			}
+#if USING_XR_SDK_OPENXR
 		}
+#endif
 
 		constructedOverlayXRDevice = OVRManager.XRDevice.Unknown;
 		if (OVRManager.loadedXRDevice == OVRManager.XRDevice.OpenVR)
@@ -975,13 +985,18 @@ public class OVROverlay : MonoBehaviour
 
 		if (currentOverlayShape == OverlayShape.Cubemap)
 		{
-#if UNITY_ANDROID && !UNITY_EDITOR
-			if (OVRPlugin.nativeXrApi != OVRPlugin.XrApi.OpenXR)
+			if (useLegacyCubemapRotation)
 			{
-				//HACK: VRAPI cubemaps assume are yawed 180 degrees relative to LibOVR.
+#if UNITY_ANDROID && !UNITY_EDITOR
 				pose.orientation = pose.orientation * Quaternion.AngleAxis(180, Vector3.up);
-			}
 #endif
+			}
+			else
+			{
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
+				pose.orientation = pose.orientation * Quaternion.AngleAxis(180, Vector3.up);
+#endif
+			}
 			pose.position = headCamera.transform.position;
 		}
 
