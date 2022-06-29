@@ -17,6 +17,8 @@ public class AgentController : MonoBehaviour
     void Start()
     {
         goal = target1;
+        //Debug.Log(goal);
+        //print(goal);
         
     }
 
